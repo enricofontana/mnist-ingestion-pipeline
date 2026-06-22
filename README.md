@@ -10,27 +10,29 @@ The implementation is intentionally plain Python rather than Kubeflow/Airflow. T
 
 ## Repository structure
 
+```text
 .
-├── pipeline.py                   # Simple reviewer CLI: ingest one batch from --input-dir to --output-dir
-├── schema.sql                    # SQLite schema for metadata, objects, batch runs and idempotency
-├── Makefile                      # Optional shortcuts for install, demo, tests, catalogue view and cleanup
-├── src/mnist_ingestion/          # Modular package with reusable ingestion logic
-│   ├── config.py                 # Default local paths and project settings
-│   ├── db.py                     # SQLite persistence for batches, images, objects and audit runs
-│   ├── metadata.py               # Hashing, image dimensions, deterministic IDs and timestamps
-│   ├── pipeline.py               # Modular end-to-end batch ingestion workflow
-│   ├── storage.py                # Content-addressed object storage using SHA-256 paths
-│   └── validation.py             # Image, label, schema and duplicate validation checks
-├── scripts/                      # Helper scripts for generation, execution, inspection and demo
+├── pipeline.py                  # Simple reviewer CLI: ingest one batch from --input-dir to --output-dir
+├── schema.sql                   # SQLite schema for metadata, objects, batch runs and idempotency
+├── Makefile                     # Optional shortcuts for install, demo, tests, catalogue view and cleanup
+├── src/mnist_ingestion/         # Modular package with reusable ingestion logic
+│   ├── config.py                # Default local paths and project settings
+│   ├── db.py                    # SQLite persistence for batches, images, objects and audit runs
+│   ├── metadata.py              # Hashing, image dimensions, deterministic IDs and timestamps
+│   ├── pipeline.py              # Modular end-to-end batch ingestion workflow
+│   ├── storage.py               # Content-addressed object storage using SHA-256 paths
+│   └── validation.py            # Image, label, schema and duplicate validation checks
+├── scripts/                     # Helper scripts for generation, execution, inspection and demo
 │   ├── prepare_sample_batch.py   # Creates the included-style sample batch
 │   ├── generate_mnist_batches.py # Generates extra MNIST-like batches for reruns/dedup demos
-│   ├── run_pipeline.py           # Modular CLI using --batch-id
-│   ├── query_catalog.py          # Inspects SQLite catalogue using Python sqlite3
-│   └── run_demo.sh               # Runs ingestion, catalogue inspection and verbose tests
-├── tests/                        # Pytest suite covering validation, hashing, schema and pipeline behavior
-├── data/                         # Demo landing data and ignored runtime outputs
-├── pyproject.toml                # Package metadata, dependencies and pytest config
-└── requirements.txt              # Minimal runtime dependencies for pip install -r
+│   ├── run_pipeline.py          # Modular CLI using --batch-id
+│   ├── query_catalog.py         # Inspects SQLite catalogue using Python sqlite3
+│   └── run_demo.sh              # Runs ingestion, catalogue inspection and verbose tests
+├── tests/                       # Pytest suite covering validation, hashing, schema and pipeline behavior
+├── data/                        # Demo landing data and ignored runtime outputs
+├── pyproject.toml               # Package metadata, dependencies and pytest config
+└── requirements.txt             # Minimal runtime dependencies for pip install -r
+```
 
 ---
 
@@ -79,7 +81,7 @@ To inspect the compact SQLite catalogue without requiring the system `sqlite3` C
 python scripts/query_catalog.py   --db data/object_store/metadata.db   --batch-id batch_demo
 ```
 
-The database can also be inspected with the optional system `sqlite3` command-line tool if it is installed. The Python package itself does not depend on the `sqlite3` CLI because Python's built-in `sqlite3` module is enough for reading and writing the catalogue.
+The database can also be inspected with the optional system `sqlite3` command-line tool if it is installed.
 
 Dry-run validation without copying image objects:
 
@@ -288,7 +290,7 @@ It also writes:
 - `processed_batches`, which records whether a batch has already been completed. This gives the simple CLI true rerun behavior: rerunning the same input batch is skipped unless `--force` is supplied.
 - `batch_runs`, which records every execution attempt, including skipped reruns, validation-only runs, start/end timestamps, row counts, status, `pipeline_version` and `ingestion_method`.
 
-The stored object path is content-addressed by SHA-256, not random UUID. This is a deliberate improvement over the minimal version: duplicate bytes across batches reuse the same object while still creating separate metadata records for each batch occurrence.
+The stored object path is content-addressed by SHA-256, not random UUID. This is a deliberate improvement: duplicate bytes across batches reuse the same object while still creating separate metadata records for each batch occurrence.
 
 ---
 
@@ -501,9 +503,9 @@ Production improvements would include:
 
 ---
 
-## Suggested commit history
+## Potential commit history
 
-A good review-friendly commit sequence would be:
+A good commit sequence would be:
 
 ```text
 Initial project structure and README outline
