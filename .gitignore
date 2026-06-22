@@ -1,0 +1,15 @@
+__pycache__/
+.pytest_cache/
+.venv/
+*.pyc
+.DS_Store
+
+# Runtime pipeline outputs
+data/object_store/
+data/catalog.db
+
+# Ignore generated landing batches by default, but keep the small demo batch.
+data/landing/*
+!data/landing/.gitkeep
+!data/landing/batch_demo/
+!data/landing/batch_demo/**
